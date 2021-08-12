@@ -1,14 +1,5 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import psycopg2
-
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'dev'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:dev@localhost:5432/cleaner'
-
-db = SQLAlchemy(app)
+from app import db
 
 
 class User(db.Model):
@@ -23,7 +14,7 @@ class User(db.Model):
         return f"User('{self.username}', '{self.email}', '{self.image_file} )"
 
 
-class CleanerDetails():
+class CleanerDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -31,3 +22,7 @@ class CleanerDetails():
         db.String(120), nullable=False, default='default.jpeg')
     password = db.Column(db.String(60), nullable=False)
     services = db.Column(db.String(120))
+
+
+if __name__ == '__main__':
+    db.create_all()

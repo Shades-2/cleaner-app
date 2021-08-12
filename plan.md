@@ -24,3 +24,7 @@ for first draft write details to table
 write an api test will post some json 
 lookup flask testing framework
 
+make a factory application
+make a route 
+use testing framwork
+check it returns 200 in the test
