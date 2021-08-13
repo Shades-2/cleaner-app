@@ -1,9 +1,8 @@
-from app import app
-from flask import request
+from flask import request, current_app
 
 
-@app.route("/")
-def hello():
+@current_app.route("/")
+def test():
     print(request)
     return "hello"
 

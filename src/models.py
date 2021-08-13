@@ -1,3 +1,6 @@
+from flask import current_app
+from flask_sqlalchemy import SQLAlchemy
+
 from app import db
 
 
@@ -21,7 +24,3 @@ class CleanerDetails(db.Model):
         db.String(120), nullable=False, default='default.jpeg')
     password = db.Column(db.String(60), nullable=False)
     services = db.Column(db.String(120))
-
-
-if __name__ == '__main__':
-    db.create_all()
