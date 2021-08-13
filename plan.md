@@ -26,5 +26,5 @@ lookup flask testing framework
 
 make a factory application
 make a route 
-use testing framwork
+use testing framework
 check it returns 200 in the test
