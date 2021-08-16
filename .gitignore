@@ -2,4 +2,8 @@ node_modules
 venv
 connection.py
 *.pyc
+<<<<<<< HEAD
 .env
+=======
+.noseids
+>>>>>>> master

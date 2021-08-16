@@ -9,6 +9,8 @@ user_name = environ['USER']
 password = environ['PASSWORD']
 secret_key = environ['SECRET_KEY']
 
+db = SQLAlchemy()
+
 
 def create_app(test=False):
     app = Flask(__name__)
@@ -21,8 +23,9 @@ def create_app(test=False):
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             f'postgresql+psycopg2://{user_name}:{password}@localhost/cleaner'
         )
-    return app
-
-
-app = create_app()
-db = SQLAlchemy(app)
+    db.init_app(app)
+    with app.app_context():
+        import routes
+        import models
+        db.create_all()
+        return app
