@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 
-config = dotenv_values('.env')
+config = load_dotenv()
 
-user_name = environ['USER']
+user_name = environ['DB_USER']
 password = environ['PASSWORD']
 secret_key = environ['SECRET_KEY']
 
