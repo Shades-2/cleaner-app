@@ -3,3 +3,4 @@ venv
 connection.py
 *.pyc
 .noseids
+.env

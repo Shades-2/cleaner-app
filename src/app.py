@@ -1,17 +1,28 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from os import environ
+from dotenv import load_dotenv
+
+config = load_dotenv()
+
+user_name = environ['DB_USER']
+password = environ['PASSWORD']
+secret_key = environ['SECRET_KEY']
 
 db = SQLAlchemy()
 
 
 def create_app(test=False):
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = f'{secret_key}'
     if test:
-        app.config['SECRET_KEY'] = 'test'
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:dev@localhost/unittest-cleaner'
+        app.config['SQLALCHEMY_DATABASE_URI'] = (
+            f'postgresql+psycopg2://{user_name}:{password}@localhost/unittest-cleaner'
+        )
     else:
-        app.config['SECRET_KEY'] = 'dev'
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:dev@localhost/cleaner'
+        app.config['SQLALCHEMY_DATABASE_URI'] = (
+            f'postgresql+psycopg2://{user_name}:{password}@localhost/cleaner'
+        )
     db.init_app(app)
     with app.app_context():
         import routes
