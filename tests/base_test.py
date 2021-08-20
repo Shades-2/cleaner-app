@@ -11,4 +11,5 @@ class BaseTest(TestCase):
         self.client = self.app.test_client()
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()

@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from dotenv import load_dotenv
 
-config = load_dotenv()
+load_dotenv()
 
 user_name = environ['DB_USER']
 password = environ['PASSWORD']
