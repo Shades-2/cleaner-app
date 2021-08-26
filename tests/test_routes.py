@@ -17,3 +17,12 @@ class TestAPI(BaseTest):
         assert cleaner.services == data['services']
         assert response.status_code == 201
 
+    def test_get_cleaner(self):
+        cleaner_details = {'username': 'x', 'email': 'y', 'password': 'z', 'services': 'a'}
+        cleaner = Cleaner(**cleaner_details)
+        db.session.add(cleaner)
+        db.session.commit()
+        response = self.client.get('/cleaner', query_string={'username': 'x'})
+        assert response.status_code == 200
+        return_details = response.json
+        assert cleaner_details == return_details
