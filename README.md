@@ -5,7 +5,7 @@ This is a shared marketplace application for hiring cleaners.
 ## Getting setup
 Make sure you have docker installed. Then type the following command into bash:
 
-    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -dp 5432:5432 postgres
+    docker run --name cleaner_db -e POSTGRES_PASSWORD=password -dp 5432:5432 postgres
 
 Create a `.env` file in root of project. It should look like this:
 
