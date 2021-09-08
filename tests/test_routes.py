@@ -39,10 +39,14 @@ class TestAPI(BaseTest):
         assert response.status_code == 400
         assert response.json['error'] == 'non unique username'
 
-    # def test_add_cleaner_with_non_unique_email(self):
-    #     cleaner_details = {'username': 'y', 'email': 'c', 'services': 'd'}
-    #     cleaner = Cleaner(**cleaner_details)
-    #     db.session.add(cleaner)
-    #     db.session.commit()
-    #     response = self.client.post('/cleaner', json=cleaner_details)
-    #     assert response.status_code == 400
+    def test_add_cleaner_with_non_unique_email(self):
+        cleaner_details = {'username': 'y', 'email': 'c', 'services': 'd'}
+        cleaner_details_with_non_unique_email = {'username': 'asdf', 'email': 'c', 'services': 'klj'}
+        cleaner = Cleaner(**cleaner_details)
+        db.session.add(cleaner)
+        db.session.commit()
+        response = self.client.post('/cleaner', json=cleaner_details_with_non_unique_email)
+        assert response.status_code == 400
+
+    # def test_add_cleaner_with_invalid_email(self):
+    #
