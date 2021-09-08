@@ -24,6 +24,7 @@ def create_app(test=False):
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             f'postgresql+psycopg2://{user_name}:{password}@localhost/cleaner'
         )
+        
     db.init_app(app)
     with app.app_context():
         import routes

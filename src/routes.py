@@ -1,5 +1,4 @@
 from flask import request, current_app as app, jsonify
-from werkzeug.exceptions import BadRequest
 from sqlalchemy.exc import IntegrityError
 from models import Cleaner
 from app import db
