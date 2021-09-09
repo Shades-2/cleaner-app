@@ -18,9 +18,9 @@ def add_cleaner():
     except IntegrityError as e:
         if 'psycopg2.errors.UniqueViolation' in str(e):
             if 'username' in str(e):
-                return jsonify({'error': constants.NON_UNIQUE_USERNAME}), 400
+                return jsonify({'error': constants.NON_UNIQUE_USERNAME_ERROR}), 400
             if 'email' in str(e):
-                return jsonify({'error': constants.NON_UNIQUE_EMAIL}), 400
+                return jsonify({'error': constants.NON_UNIQUE_EMAIL_ERROR}), 400
         raise
     return jsonify({}), 201
 
@@ -29,7 +29,7 @@ def add_cleaner():
 def get_cleaner():
     username = request.args.get('username')
     if not username:
-        return jsonify({'error': 'Username not provided'}), 400
+        return jsonify({'error': constants.USERNAME_NOT_PROVIDED_ERROR}), 400
 
     cleaner = db.session.query(
         Cleaner

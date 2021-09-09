@@ -4,3 +4,4 @@ connection.py
 *.pyc
 .noseids
 .env
+.pytest_cache
