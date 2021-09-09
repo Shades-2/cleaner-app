@@ -7,18 +7,16 @@ class TestAPI(BaseTest):
     def test_add_cleaner(self):
         data = {'username': 'foo',
                 'email': 'bar',
-                'password': 'baz',
                 'services': 'x'}
         response = self.client.post('/cleaner', json=data)
         cleaner = db.session.query(Cleaner).filter_by(username='foo').first()
         assert cleaner.username == data['username']
         assert cleaner.email == data['email']
-        assert cleaner.password == data['password']
         assert cleaner.services == data['services']
         assert response.status_code == 201
 
     def test_get_cleaner(self):
-        cleaner_details = {'username': 'x', 'email': 'y', 'password': 'z', 'services': 'a'}
+        cleaner_details = {'username': 'x', 'email': 'y', 'services': 'a'}
         cleaner = Cleaner(**cleaner_details)
         db.session.add(cleaner)
         db.session.commit()
@@ -26,3 +24,29 @@ class TestAPI(BaseTest):
         assert response.status_code == 200
         return_details = response.json
         assert cleaner_details == return_details
+
+    # TODO test get cleaner no username provided
+
+    def test_add_cleaner_with_non_unique_username(self):
+        username = 'khjfgk'
+        cleaner_details = {'username': username, 'email': 'a', 'services': 'b'}
+        cleaner = Cleaner(**cleaner_details)
+        db.session.add(cleaner)
+        db.session.commit()
+        response = self.client.post(
+            '/cleaner',
+            json={'username': username, 'email': 'c', 'services': 'd'})
+        assert response.status_code == 400
+        assert response.json['error'] == 'non unique username'
+
+    def test_add_cleaner_with_non_unique_email(self):
+        cleaner_details = {'username': 'y', 'email': 'c', 'services': 'd'}
+        cleaner_details_with_non_unique_email = {'username': 'asdf', 'email': 'c', 'services': 'klj'}
+        cleaner = Cleaner(**cleaner_details)
+        db.session.add(cleaner)
+        db.session.commit()
+        response = self.client.post('/cleaner', json=cleaner_details_with_non_unique_email)
+        assert response.status_code == 400
+
+    # def test_add_cleaner_with_invalid_email(self):
+    #

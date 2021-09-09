@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from os import environ
 from dotenv import load_dotenv
 
@@ -11,7 +10,6 @@ password = environ['PASSWORD']
 secret_key = environ['SECRET_KEY']
 
 db = SQLAlchemy()
-ma = Marshmallow()
 
 
 def create_app(test=False):
@@ -26,6 +24,7 @@ def create_app(test=False):
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             f'postgresql+psycopg2://{user_name}:{password}@localhost/cleaner'
         )
+        
     db.init_app(app)
     with app.app_context():
         import routes

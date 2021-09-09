@@ -1,27 +1,44 @@
 from flask import request, current_app as app, jsonify
+from sqlalchemy.exc import IntegrityError
 from models import Cleaner
 from app import db
+import constants
 
 
 @app.route("/cleaner", methods=['POST'])
 def add_cleaner():
     data = request.json
-    cleaner = Cleaner(username=data.get('username'),
-                      email=data.get('email'),
-                      password=data.get('password'),
-                      services=data.get('services'))
+    cleaner = Cleaner(
+        username=data.get('username'),
+        email=data.get('email'),
+        services=data.get('services'))
     db.session.add(cleaner)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as e:
+        if 'psycopg2.errors.UniqueViolation' in str(e):
+            if 'username' in str(e):
+                return jsonify({'error': constants.NON_UNIQUE_USERNAME_ERROR}), 400
+            if 'email' in str(e):
+                return jsonify({'error': constants.NON_UNIQUE_EMAIL_ERROR}), 400
+        raise
     return jsonify({}), 201
 
 
 @app.route("/cleaner", methods=['GET'])
 def get_cleaner():
     username = request.args.get('username')
-    cleaner = db.session.query(Cleaner).filter_by(username=username).first()
+    if not username:
+        return jsonify({'error': constants.USERNAME_NOT_PROVIDED_ERROR}), 400
+
+    cleaner = db.session.query(
+        Cleaner
+    ).filter_by(
+        username=username
+    ).first_or_404()
+
     return jsonify({
         'username': cleaner.username,
         'email': cleaner.email,
-        'password': cleaner.password,
         'services': cleaner.services
     })
