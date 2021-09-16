@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from models import Cleaner
 from app import db
 import constants
+from email_validator import validate_email, EmailSyntaxError
 
 
 @app.route("/cleaner", methods=['POST'])
@@ -12,6 +13,12 @@ def add_cleaner():
         username=data.get('username'),
         email=data.get('email'),
         services=data.get('services'))
+
+    try:
+        validate_email(data.get('email'))
+    except EmailSyntaxError as e:
+        return jsonify({'error': str(e)})
+
     db.session.add(cleaner)
     try:
         db.session.commit()
@@ -22,6 +29,7 @@ def add_cleaner():
             if 'email' in str(e):
                 return jsonify({'error': constants.NON_UNIQUE_EMAIL}), 400
         raise
+
     return jsonify({}), 201
 
 
@@ -29,7 +37,7 @@ def add_cleaner():
 def get_cleaner():
     username = request.args.get('username')
     if not username:
-        return jsonify({'error': 'Username not provided'}), 400
+        return jsonify({'error': constants.USERNAME_NOT_PROVIDED_ERROR}), 400
 
     cleaner = db.session.query(
         Cleaner
