@@ -15,9 +15,10 @@ def add_cleaner():
         services=data.get('services'))
 
     try:
-        validate_email(data.get('email'))
+        validate_email(cleaner.email)
+
     except EmailSyntaxError as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 400
 
     db.session.add(cleaner)
     try:

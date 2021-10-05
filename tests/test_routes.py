@@ -23,6 +23,7 @@ class TestAPI(BaseTest):
         })
 
         # Check response is correct
+
         self.assertEqual(response.status_code, 201)
 
         # Retrieve newly created cleaner object from database and check it's correct
@@ -48,9 +49,10 @@ class TestAPI(BaseTest):
 
     def test_add_cleaner_with_non_unique_email(self):
         cleaner_details_with_non_unique_email = {'username': 'johnny', 'email': 'bar@gmail.com', 'services': 'klj'}
-        cleaner = Cleaner(**cleaner_details_with_non_unique_email)
         response = self.client.post('/cleaner', json=cleaner_details_with_non_unique_email)
         self.assertEqual(response.status_code, 400)
 
     def test_add_cleaner_with_invalid_email(self):
-        pass
+        cleaner_deatils_with_invalid_email = {'username': 'johnny', 'email': 'as', 'services': 'klj'}
+        response = self.client.post('/cleaner', json=cleaner_deatils_with_invalid_email)
+        self.assertEqual(response.status_code, 400)
